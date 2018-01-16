@@ -1,0 +1,10 @@
+{
+  "name": "Random forest Imp",
+  "description": "Compute Random forest importance values",
+  "tags": ["multivariate analysis"],
+  "authors": ["tercen"],
+  "urls": ["https://github.com/tercen/rfImp_operator"],
+  "properties": []
+}
+
+
