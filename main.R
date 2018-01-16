@@ -1,25 +1,37 @@
 library(tercen)
 library(dplyr)
-
-do.ttest = function(df, ...){
-  pv = NaN
-  result = try(t.test(.y ~ .group.colors, data=df, ...), silent = TRUE)
-  if(!inherits(result, 'try-error')) pv = result$p.value
-  return (data.frame(.ri = df$.ri[1], .ci = df$.ci[1], pv= c(pv)))
+library(reshape2)
+library(ranger)
+ 
+do.unique = function(df){
+  result = unique(df)
+  if (dim(result)[1] > 1) stop('One color per column is required')
+  return (result %>% select_(.dots = ("-.ci")))
 }
-  
+
 ctx = tercenCtx()
 
 if (length(ctx$colors) < 1) stop("A color factor is required.")
+
+pred.table = ctx$select(unlist(list(ctx$colors, '.ci')))  %>% 
+  group_by(.ci) %>% 
+  do(do.unique(.)) 
+  
+table = as.data.frame(ctx %>% select(.ci, .ri, .y) %>%
+                        reshape2::acast(.ci ~ .ri, value.var='.y', fun.aggregate=mean)) %>%
+  rename_all(.funs=function(cname) paste0('c', cname)) %>%
+  mutate(.pred = do.call(function(...) paste(..., sep='.'), pred.table [ctx$colors]))
+
+rf = ranger(.pred ~ ., data = table, importance='impurity')
  
-ctx %>% 
-  select(.ci, .ri, .y) %>%
-  mutate(.group.colors = do.call(function(...) paste(..., sep='.'), ctx$select(ctx$colors))) %>%
-  group_by(.ci, .ri) %>%
-  do(do.ttest(., 
-              alternative = ctx$op.value('alternative'),
-              mu = as.double(ctx$op.value('mu')), 
-              var.equal = as.logical(ctx$op.value('var.equal')),
-              conf.level = as.double(ctx$op.value('conf.level')))) %>%
-  ctx$addNamespace() %>%
-  ctx$save()
+imp.table = data.frame(.ri=seq(from=0, to=length(imp)- 1),
+                       rfImp = rf$variable.importance) %>% 
+  ctx$addNamespace()
+ 
+pred.table = data.frame(rfError=c(rf$prediction.error)) %>% 
+  ctx$addNamespace()
+ 
+ctx$save(list(imp.table, pred.table))
+
+
+
