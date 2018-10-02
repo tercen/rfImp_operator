@@ -1,10 +1,33 @@
-# Random forest
+# rfImp operator
 
-```
-https://github.com/tercen/rfImp_operator.git
-```
+#### Description
+`rfImp` operator computes random forest importance values for a given dataset
 
-```R
-packrat::init(options = list(use.cache = TRUE))
-```
+##### Usage
+Input projection|.
+---|---
+`color`   | indicates the groups to compare 
+`row`  | indicates the variables (e.g. genes, markers) 
+`col`  | indicates the observations (e.g. samples, cells, individuals) 
+`y-axis`| measurement value
+
+Output relations|.
+---|---
+` rfImp`| numeric, importance value calculated per row (i.e. variable)
+
+##### Details
+`rfImp` operator computes random forest importance values for each independant variable (i.e. row) of the dataset. An importance value is 
+
+
+#### References
+- Wright, M. N. & Ziegler, A. (2017). ranger: A fast implementation of random forests for high dimensional data in C++ and R. J Stat Softw 77:1-17. https://doi.org/10.18637/jss.v077.i01.
+- see the `ranger::ranger` function of the R package for the documentation. 
+
+
+
+##### See Also
+[ttest](https://github.com/tercen/ttest_operator), [anova](https://github.com/tercen/anova_operator)
+
+#### Examples
+
 
