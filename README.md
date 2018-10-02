@@ -16,7 +16,7 @@ Output relations|.
 ` rfImp`| numeric, importance value calculated per row (i.e. variable)
 
 ##### Details
-`rfImp` operator computes random forest importance values for each independant variable (i.e. row) of the dataset. An importance value is 
+`rfImp` operator computes random forest importance values for each independant variable (i.e. row) of the dataset. An importance value is a value representing how important the variable is for the seperation of the groups. 
 
 
 #### References
