@@ -27,8 +27,13 @@ rf = ranger(.pred ~ ., data = table, importance='impurity')
 imp.table = data.frame(.ri=seq(from=0, to=length(rf$variable.importance)- 1),
                        rfImp = rf$variable.importance) %>% 
   ctx$addNamespace()
- 
-pred.table = data.frame(rfError=c(rf$prediction.error)) %>% 
+
+pred.error  <- rf$prediction.error
+
+cTable = tibble(.ci=seq.int(0,ctx$cschema$nRows-1)) %>% mutate(pred.error=pred.error)
+rTable = tibble(.ri=seq.int(0,ctx$rschema$nRows-1)) %>% mutate(pred.error=pred.error)
+
+pred.table <- cTable %>% full_join(rTable) %>%
   ctx$addNamespace()
  
 ctx$save(list(imp.table, pred.table))
