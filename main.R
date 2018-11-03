@@ -20,7 +20,7 @@ pred.table = ctx$select(unlist(list(ctx$colors, '.ci')))  %>%
 table = as.data.frame(ctx %>% select(.ci, .ri, .y) %>%
                         reshape2::acast(.ci ~ .ri, value.var='.y', fun.aggregate=mean)) %>%
   rename_all(.funs=function(cname) paste0('c', cname)) %>%
-  mutate(.pred = do.call(function(...) paste(..., sep='.'), pred.table [ctx$colors]))
+  mutate(.pred = do.call(function(...) paste(..., sep='.'), pred.table [unlist(ctx$colors)]))
 
 rf = ranger(.pred ~ ., data = table, importance='impurity')
  
