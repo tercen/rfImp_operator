@@ -6,7 +6,7 @@
 ##### Usage
 Input projection|.
 ---|---
-`color`   | indicates the groups to compare 
+`labels`   | indicates the groups to compare 
 `row`  | indicates the variables (e.g. genes, markers) 
 `col`  | indicates the observations (e.g. samples, cells, individuals) 
 `y-axis`| measurement value
