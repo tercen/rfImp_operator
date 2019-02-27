@@ -5,22 +5,22 @@ library(ranger)
  
 do.unique = function(df){
   result = unique(df)
-  if (dim(result)[1] > 1) stop('One color per column is required')
+  if (dim(result)[1] > 1) stop('One label is required')
   return (result %>% select_(.dots = ("-.ci")))
 }
 
 ctx = tercenCtx()
 
-if (length(ctx$colors) < 1) stop("A color factor is required.")
+if (length(ctx$labels) < 1) stop("One or more label factors are required.")
 
-pred.table = ctx$select(unlist(list(ctx$colors, '.ci')))  %>% 
+pred.table = ctx$select(unlist(list(ctx$labels, '.ci')))  %>% 
   group_by(.ci) %>% 
   do(do.unique(.)) 
   
 table = as.data.frame(ctx %>% select(.ci, .ri, .y) %>%
                         reshape2::acast(.ci ~ .ri, value.var='.y', fun.aggregate=mean)) %>%
   rename_all(.funs=function(cname) paste0('c', cname)) %>%
-  mutate(.pred = do.call(function(...) paste(..., sep='.'), pred.table [unlist(ctx$colors)]))
+  mutate(.pred = do.call(function(...) paste(..., sep='.'), pred.table [unlist(ctx$labels)]))
 
 rf = ranger(.pred ~ ., data = table, importance='impurity')
  
