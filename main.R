@@ -25,7 +25,7 @@ table = as.data.frame(ctx %>% select(.ci, .ri, .y) %>%
 rf = ranger(.pred ~ ., data = table, importance='impurity')
  
 imp.table = data.frame(.ri=seq(from=0, to=length(rf$variable.importance)- 1),
-                       rfImp = rf$variable.importance) %>% 
+                       rfImp = -rf$variable.importance) %>% 
   ctx$addNamespace()
 
 pred.error  <- rf$prediction.error
