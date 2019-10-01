@@ -5,7 +5,7 @@
   "inputDataUri": "crabs-long.csv",
   "outputDataUri": "result.csv",
   "columns": ["observation"],
-  "rows": ["variable],
+  "rows": ["variable"],
   "colors": [],
   "labels": ["sp"],
   "yAxis": "measurement",
