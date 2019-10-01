@@ -3,12 +3,14 @@ library(dplyr)
 library(reshape2)
 library(ranger)
  
+
 do.unique = function(df){
   result = unique(df)
   if (dim(result)[1] > 1) stop('One label is required')
   return (result %>% select_(.dots = ("-.ci")))
 }
 
+set.seed(42)
 ctx = tercenCtx()
 
 if (length(ctx$labels) < 1) stop("One or more label factors are required.")
